@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import api from '../services/api';
 
 import './Feed.css';
 
@@ -8,20 +9,31 @@ import comment from '../assets/comment.svg';
 import send from '../assets/send.svg';
 
 class Feed extends Component {
+    state = {
+        feed: [],
+    }
+
+    async componentDidMount() {
+        const response= await api.get('posts');
+
+        this.setState( { feed: response.data });
+    }
+
     render() {
         return (
             <section id="post-list">
-                <article>
+                { this.state.feed.map(post => (
+                    <article key={ post._id } >
                     <header>
                         <div className="user-info">
-                            <span>User Name</span>
-                            <span className="place">Local</span>
+                            <span>{ post.author }</span>
+                            <span className="place">{ post.place }</span>
                         </div>
 
                         <img src={more} alt="Mais" />
                     </header>
 
-                    <img src="http://localhost:3333/files/511812.jpg" alt="Imagem do Post"/>
+                    <img src={ `http://localhost:3333/files/${post.image}` } lt="Imagem do Post"/>
 
                     <footer>
                         <div className="actions">
@@ -30,40 +42,15 @@ class Feed extends Component {
                             <img src={send} alt="send"/>
                         </div>
 
-                        <strong>900 curtidas</strong>
+                        <strong>{ post.likes } curtidas</strong>
 
-                        <p>Um post muito massa!
-                            <span>#react #omnstack #top</span>
+                        <p>
+                            { post.description }
+                            <span>{ post.hashtags }</span>
                         </p>
                     </footer>
                 </article>
-
-                <article>
-                    <header>
-                        <div className="user-info">
-                            <span>User Name</span>
-                            <span className="place">Local</span>
-                        </div>
-
-                        <img src={more} alt="Mais" />
-                    </header>
-
-                    <img src="http://localhost:3333/files/511812.jpg" alt="Imagem do Post"/>
-
-                    <footer>
-                        <div className="actions">
-                            <img src={like} alt="like"/>
-                            <img src={comment} alt="comment"/>
-                            <img src={send} alt="send"/>
-                        </div>
-
-                        <strong>900 curtidas</strong>
-
-                        <p>Um post muito massa!
-                            <span>#react #omnstack #top</span>
-                        </p>
-                    </footer>
-                </article>
+                )) }
             </section>
         );
     }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import api from '../services/api';
 import io from 'socket.io-client';
+import config from '../config';
 
 import './Feed.css';
 
@@ -23,7 +24,7 @@ class Feed extends Component {
     }
 
     registerToSocket = () => {
-        const socket = io('http://localhost:3333')
+        const socket = io(config.localhost)
 
         // post, like
 
@@ -58,7 +59,7 @@ class Feed extends Component {
                             <img src={more} alt="Mais" />
                         </header>
 
-                        <img src={`http://localhost:3333/files/${post.image}`} alt="Imagem do Post" />
+                        <img src={`${config.localhost}/files/${post.image}`} alt="Imagem do Post" />
 
                         <footer>
                             <div className="actions">

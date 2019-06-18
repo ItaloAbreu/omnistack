@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import io from 'socket.io-client';
 import api from '../services/api';
+import config from '../config';
 
 import { View, Text, Image, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
 
@@ -32,7 +33,7 @@ async componentDidMount() {
 }
 
 registerToSocket = () => {
-    const socket = io('http://192.168.0.101:3333');
+    const socket = io(config.localhost);
 
     // post, like
 
@@ -55,7 +56,7 @@ handleLike = id => {
 
   render() {
     return (
-    <View style={styles.container}>
+      <View style={styles.container}>
       <FlatList
         data={this.state.feed}
         keyExtractor={ post => post._id}
@@ -71,7 +72,7 @@ handleLike = id => {
               <Image source={more} />
             </View>
 
-            <Image style={styles.feedImage} source={{ uri: `http://192.168.0.101:3333/files/${item.image}` }} />
+            <Image style={styles.feedImage} source={{ uri: `${config.localhost}/files/${item.image}` }} />
 
             <View style={styles.feedItemFooter}>
               <View style={styles.actions}>
